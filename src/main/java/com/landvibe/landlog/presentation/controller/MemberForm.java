@@ -1,4 +1,4 @@
-package com.landvibe.landlog.controller;
+package com.landvibe.landlog.presentation.controller;
 
 public class MemberForm {
     private String name;

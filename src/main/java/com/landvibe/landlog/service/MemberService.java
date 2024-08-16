@@ -1,7 +1,7 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.repository.MemberRepository;
+import com.landvibe.landlog.infrastructure.persistence.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

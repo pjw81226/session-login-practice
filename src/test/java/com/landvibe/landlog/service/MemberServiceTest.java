@@ -1,7 +1,7 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.repository.MemoryMemberRepository;
+import com.landvibe.landlog.infrastructure.persistence.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

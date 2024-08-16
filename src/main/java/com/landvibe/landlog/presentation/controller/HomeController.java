@@ -1,4 +1,4 @@
-package com.landvibe.landlog.controller;
+package com.landvibe.landlog.presentation.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

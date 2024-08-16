@@ -1,4 +1,4 @@
-package com.landvibe.landlog.controller;
+package com.landvibe.landlog.presentation.controller;
 
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.service.MemberService;

@@ -2,20 +2,40 @@
 
 ## 자바 버전 : 17
 
-## 과제 제출 방법
+## DDD 설계 구조, Session Login 이용
 
-1. 자신의 레포로 fork
-2. 과제 구현
-3. 기능별 commit
-4. commit convention 지키기
-5. 각자 자신의 branch로 PR
-   - 김지웅: jiwoong
-   - 정건우: gunwoo
-   - 이태균: taekyun
-   - 박지현: jihyun
-   - 박해원: haewon
-   - 박수지: suji
-   - 서예원: yewon
-   - 인수빈: subin
-   - 장은채: eunchae
-   - 홍수진: sujin
+DDD, 네개의 Layer로 구성되어있다.
+- presentation
+- application
+- domain
+- infrastructure
+
+presentation : controller, dto, router 등 Client와 직접적인 상호작용이 일어나는 Layer  
+application : service 와 같은 applicaiton logic이 구현되는 Layer  
+domain : 문제의 영역이 정의되는 Layer, application logic에서 사용되는 비즈니스 로직을 구현하고 캡슐화 한다.  
+persistence : 외부 기술과 연결되는 Layer, DB와의 연결, Security, 외부 API 연결 등이 구현된다.  
+
+  
+## DDD와 Layer, ORM
+DDD 설계 방식에서는 각 Layer에 대한 경계를 정확하게 지키는 것이 핵심이다.  
+해당 경계를 정확하게 지키는 것은 시스템의 유지보수를 쉽게 만들어주고, 확장에 열려있게 만들어준다. 특히 객체지향적인 특성을 살릴 수 있다.  
+다만 실제 서비스에서 DDD 설계 구조를 완벽하게 지키기에는 성능적인 이슈가 존재한다.  
+다음 상황을 상상해보자.
+
+DDD 설계 패턴에서의 Domain Layer는 DB 기술에 의존해선 안된다. DB 기술 연결은 오롯이 Infrastructure Layer의 담당이기 때문이다. 
+따라서 대개 Domain Layer에는 문제의 영역인 model을 정의 하고, Infrastructure 에서 DB와 연결되는 Entity를 정의, 구현한다.  
+
+특정 데이터를 DB에서 읽은 다음 Client에게 던져주기 위해서는 Entity를 Domain으로 변환하는 Mapping 로직이 필요하다.
+이때 DDD 설계패턴의 문제가 발생한다. 게시판이 존재하고, 게시판에는 여러 게시글이 존재하고, 게시글에는 여러 첨부파일이 존재한다고 가정하자.
+게시글과 첨부파일은 one to many 관계 이므로, 연관관계 편의 메서드로 연결 되어 있을 경우, 기본적인 CRUD 구현 방식 에서는 Domain Model = Entity
+와 같이 구현하므로, JPA의 Lazy Loading을 통해 게시글을 직접 조회하기 전까지는 첨부파일을 DB에서 불러오는 쿼리를 날리지 않는다.
+
+하지만, DDD에서는 Entity에서 Lazy Loading으로 첨부파일을 가져오지 않아도, 이를 Model로 Mapping 시키기 때문에 전체 게시글을 전부 조회해서 
+해당 게시글에 속한 첨부파일을 가져오는 불상사가 발생한다. 즉, 만약 게시판에 글이 10개가 존재한다면, 게시판 목록을 보는 쿼리를 날려도 처음 한번 + 10번의 쿼리가
+추가적으로 날아가는 상황이 발생한다. Lazy Loading이 정상적으로 작동하지 않는 것이다.
+
+이러한 상황은 repository의 함수를 두개 만들고, Mapping 함수도 두개 만들어서 처리할 수 있다. 특정 게시글의 정보를 가져오는 
+서비스에서는 모든 첨부파일을 가져와야하니 Entity와 Model의 연관관계 편의 메소드를 Mapping해준다.
+하지만 게시판 목록을 보여주는 서비스는 굳이 첨부파일을 가져올 필요가 없으니 Entity와 Model 사이의 연관관계 편의 메소드를 연결하지 않는 방식으로 
+처리가 가능하다.
+
