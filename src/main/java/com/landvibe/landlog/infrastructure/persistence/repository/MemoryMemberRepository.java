@@ -1,6 +1,7 @@
 package com.landvibe.landlog.infrastructure.persistence.repository;
 
-import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.domain.model.Member;
+import com.landvibe.landlog.domain.repository.MemberRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

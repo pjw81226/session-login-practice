@@ -1,6 +1,6 @@
-package com.landvibe.landlog.infrastructure.persistence.repository;
+package com.landvibe.landlog.domain.repository;
 
-import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.domain.model.Member;
 
 import java.util.List;
 import java.util.Optional;
